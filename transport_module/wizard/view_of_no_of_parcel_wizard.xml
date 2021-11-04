@@ -1,0 +1,36 @@
+<openerp>
+<data>
+       <record id="wizard_for_enter_no_of_parcel" model="ir.ui.view">
+            <field name="name">Enter No Of Parcels</field>
+            <field name="model">parcel.entry.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="no_of_parcel"/>
+                    </group>
+                    <footer>
+                        <button name="add_no_of_parcels" type="object" string="Add No Of Parcels"
+                            class="btn-primary" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+	<!--Action for genrate parcel wizard-->
+	<record id="action_parcel_entry_wizard" model="ir.actions.act_window">
+            <field name="name">Enter Parcel Entry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">parcel.entry.wizard</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+	
+</data>
+</openerp>
+
+
+                   

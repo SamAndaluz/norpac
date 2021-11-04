@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="transport_document_view">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <br/>
+                    <div class="oe_structure"/>
+                    <br/>
+                    <h1>Transport Entry Details:
+                        <span t-field="o.name"/>
+                    </h1>
+                    <br/>
+
+                    <table>
+                        <tr>
+                            <td style="width: 100%; height: 22px; padding-left:10px;"/>
+                            <b>
+                                <span>Customer Address:</span>
+                            </b>
+
+                        </tr>
+                        <tr>
+                            <td style="width: 100%">
+                                <span t-field="o.customer_id.name"/>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td t-att-class="(not o.customer_id.street or not o.customer_id.zip) and 'danger'">
+                                <span t-field="o.customer_id"
+                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <br/>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.date">
+                                    <strong>Sale Order</strong>
+                                </th>
+                                <th>
+                                    <strong>Transport Date</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.date">
+                                    <span t-field="o.picking_id.origin"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.picking_id">
+                                        <span t-field="o.date"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.date">
+                                    <strong>Transporter</strong>
+                                </th>
+                                <th>
+                                    <strong>Delivery</strong>
+                                </th>
+                                <th>
+                                    <strong>Responsible User</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.date">
+                                    <span t-field="o.transport_id.name"/>
+                                </td>
+                                <td t-if="o.picking_id">
+                                    <span t-field="o.picking_id"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.user_id">
+                                        <span t-esc="o.user_id.name"/>.
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.tag_ids">
+                                    <strong>Vehicle</strong>
+                                </th>
+                                <th t-if="o.location_dest_id">
+                                    <strong>Destination Location</strong>
+                                </th>
+                                <th t-if="o.company_id.name">
+                                    <strong>Company</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.tag_ids">
+                                    <span t-field="o.tag_ids"/>
+                                </td>
+                                <td t-if="o.location_dest_id">
+                                    <span t-field="o.location_dest_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.company_id.name">
+                                        <span t-esc="o.company_id.name"/>.
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.tag_ids.driver_id">
+                                    <strong>Vehicle Diver</strong>
+                                </th>
+                                <th t-if="o.picking_id.no_of_parcels">
+                                    <strong>No Of Parcel</strong>
+                                </th>
+                                <th t-if="o.picking_id.lr_number">
+                                    <strong>LR Number</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.tag_ids.driver_id">
+                                    <span t-field="o.tag_ids.driver_id"/>
+                                </td>
+                                <td t-if="o.picking_id.no_of_parcels">
+                                    <span t-field="o.picking_id.no_of_parcels"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.picking_id.lr_number">
+                                        <span t-esc="o.picking_id.lr_number"/>.
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.date">
+                                    <strong>Date</strong>
+                                </th>
+                                <th>
+                                    <strong>Delivery Order</strong>
+                                </th>
+                                <th colspan="3">
+                                    <strong>Contact Person</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.date">
+                                    <span t-field="o.date"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.picking_id">
+                                        <span t-field="o.picking_id"/>
+                                    </t>
+                                </td>
+                                <td colspan="2">
+                                    <t t-if="o.contact_person">
+                                        <span t-field="o.contact_person"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Delivery Info</h3>
+
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th t-if="o.date">
+                                    <strong>carrier</strong>
+                                </th>
+                                <th>
+                                    <strong>Tracking Reference</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td t-if="o.date">
+                                    <span t-field="o.date"/>
+                                </td>
+                                <td>
+                                    <t t-if="o.picking_id">
+                                        <span t-field="o.picking_id"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <h3>Transport Route Details</h3>
+                    <table class="table table-condensed mt48" t-if="o.transport_rote_ids">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <strong>Source Location</strong>
+                                </th>
+                                <th>
+                                    <strong>Destination Location</strong>
+                                </th>
+                                <th>
+                                    <strong>Distance</strong>
+                                </th>
+                                <th>
+                                    <strong>Time In Hours</strong>
+                                </th>
+
+                                <th>
+                                    <strong>Start Time</strong>
+                                </th>
+
+                                <th>
+                                    <strong>End Time</strong>
+                                </th>
+
+                                <th>
+                                    <strong>Tracking Number</strong>
+                                </th>
+
+                                <th>
+                                    <strong>State</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.transport_rote_ids" t-as="line">
+                                <td>
+                                    <t>
+                                        <span t-field="line.source_loc"/>
+                                    </t>
+                                </td>
+
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.dest_loc"/>
+                                    </t>
+                                </td>
+
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.distance"/>
+                                        (KM)
+                                    </t>
+                                </td>
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.time"/>
+                                        Hrs.
+                                    </t>
+                                </td>
+
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.start_time"/>
+                                    </t>
+                                </td>
+
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.end_time"/>
+                                    </t>
+                                </td>
+
+
+                                <td>
+                                    <t>
+                                        <span t-field="line.tracking_number"/>
+                                    </t>
+                                </td>
+
+                                <td>
+                                    <t>
+                                        <span t-field="o.state"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </t>
+        </template>
+
+        <template id="transport_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="transport_module.transport_document_view" t-lang="o.customer_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</openerp>

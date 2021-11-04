@@ -1,0 +1,14 @@
+<openerp>
+    <data>
+
+	<report
+        id="Transport_Entry_Report11"
+        string="Transport Entry"
+        model="transport.entry.wizard"
+        report_type="qweb-pdf"
+        name="transport_module.transport_reports_details_1"
+        file="transport_module.transport_reports_details_1"
+    />
+   
+    </data>
+</openerp>    
