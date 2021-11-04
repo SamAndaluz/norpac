@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_vehicle_transporter" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='location']" position="after">          
+                <field name = "transporter_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_tracking_number" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">          
+                <field name = "tracking_number"/>
+                <field name = "date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_invoice" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+        	<field name= "company_id" position="after">
+            	<field name="transport_id"/>
+            
+            </field>
+            <xpath expr="//field[@name='amount_residual']" position="after">          
+                <field name = "total_charge"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

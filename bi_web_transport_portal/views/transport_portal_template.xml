@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="portal_my_home_transport" name="Portal My Home: Transport Details"
+		inherit_id="portal.portal_my_home" priority="40">
+		<xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+			<t t-if="transport_count">
+				<a href="/my/transport_details" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Transport Details
+				<span class="badge badge-secondary badge-pill" t-esc="transport_count"/></a>
+			</t>
+		</xpath>
+	</template>
+
+	<template id="portal_my_home_menu_transport" name="Portal layout : transport menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+		<xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+			<li t-if="transport" t-attf-class="breadcrumb-item #{'active ' if not sale_order else ''}">
+				<a t-if="transport_list" t-attf-href="/my/transport_details">Transport Details</a>
+				<t t-else="">Transport Details</t>
+			</li>
+			<li t-if="transport_list" t-attf-class="breadcrumb-item #{'active ' if not sale_order else ''}">
+				<a t-if="transport_list" t-attf-href="/my/transport_details">Transport Details</a>
+				<t t-else="">Transport Details</t>
+			</li>
+			<li t-if="transport_list" class="breadcrumb-item active">
+				<span t-field="transport_list.name"/>
+			</li>
+		</xpath>
+	</template>
+
+	<template id="portal_transport_list" name="Transport Details List">
+		<t t-call="portal.portal_layout">
+			<div class="panel panel-default">
+				<div class="col-md-12">
+				<form class="col-sm-4 col-md-4 col-xs-12 text-center" action="/my/transport_details" method="post" t-att-class="search_class" style="margin-bottom:16px;display;display: inline-block;">
+					<input type="hidden" name="csrf_token" class="mb32" t-att-value="request.csrf_token()" />
+					<div class="input-group" style="margin-top:10px;margin-left:200px"> 
+						<t t-call="website.website_search_box"/>
+						<t t-set="date_desc_label">Newest</t>
+						<t t-set="date_asc_label">Older</t>
+						<t t-set="name_asc_label">Name</t>
+						<t t-set="transport_sortable" t-value="[
+							(date_desc_label, 'date desc'),
+							(date_asc_label, 'date asc'),
+							(name_asc_label, 'name asc'),
+						]"/>
+						<t t-set="filter_all">All</t>
+						<t t-set="today_date">Today</t>
+						<t t-set="draft">Start</t>
+						<t t-set="waiting">Waiting</t>
+						<t t-set="in_progress">In-Progress</t>
+						<t t-set="done">Done</t>
+						<t t-set="cancel">Cancel</t>
+						<t t-set="transport_filter" t-value="[
+							(filter_all, 'filter all'),
+							(today_date, 'Today'),
+							(draft, 'Draft'),
+							(waiting, 'Waiting'),
+							(in_progress, 'In-Progress'),
+							(done, 'Done'),
+							(cancel, 'Cancel'),
+						]"/>
+						<t t-set="group_none">None</t>
+						<t t-set="group_status">State</t>
+						<t t-set="group_user">Responsible User</t>
+						<t t-set="group_vehicle">Vehicle</t>
+						<t t-set="transport_group" t-value="[
+							(group_none, 'none'),
+							(group_status, 'status'),
+							(group_user, 'responsible'),
+							(group_vehicle, 'vehicle'),
+							
+						]"/>
+						<t t-set="website_transport_sortable_current" t-value="[sort for sort in transport_sortable if sort[1]==request.params.get('transport_ftr', '')]"/>
+
+						<t t-set="website_transport_filter_current" t-value="[filter for filter in transport_filter if filter[1]==request.params.get('trans_filter', '')]"/>
+
+						<t t-set="website_transport_groupby_current" t-value="[group for group in transport_group if group[1]==request.params.get('trans_group', '')]"/>
+
+						<div class="dropdown ml-2 dropdown_sorty_by">
+							<a role="button" href="#" class="dropdown-toggle btn btn-secondary" data-toggle="dropdown">
+								<t t-if='len(website_transport_sortable_current)'>
+									<span>Sorting by : <t t-raw='website_transport_sortable_current[0][0]'/></span>
+								</t>
+								<t t-else='1'>
+									<span>Sort by</span>
+								</t>
+							</a>    
+							<div class="dropdown-menu" role="menu">
+								<t t-foreach="transport_sortable" t-as="sortby">
+									<a role="menuitem" rel="noindex,nofollow" t-att-href="keep('/my/transport_details', transport_ftr=sortby[1])" class="dropdown-item">
+										<span t-raw="sortby[0]"/>
+									</a>
+								</t>
+							</div>                                   
+						</div>
+						<div class="dropdown ml-2 dropdown_sorty_by">
+							<a role="button" href="#" class="dropdown-toggle btn btn-secondary" data-toggle="dropdown">
+								<t t-if='len(website_transport_filter_current)'>
+									<span>Filter by : <t t-raw='website_transport_filter_current[0][0]'/></span>
+								</t>
+								<t t-else='1'>
+									<span>Filter by</span>
+								</t>
+							</a>
+							<div class="dropdown-menu" role="menu">
+								<t t-foreach="transport_filter" t-as="sortby">
+									<a role="menuitem" rel="noindex,nofollow" t-att-href="keep('/my/transport_details', trans_filter=sortby[1])" class="dropdown-item">
+										<span t-raw="sortby[0]"/>
+									</a>
+								</t>
+							</div> 
+						</div>
+						<div class="dropdown ml-2 dropdown_sorty_by">
+							<a role="button" href="#" class="dropdown-toggle btn btn-secondary" data-toggle="dropdown">
+								<t t-if='len(website_transport_groupby_current)'>
+									<span>Group by : <t t-raw='website_transport_groupby_current[0][0]'/></span>
+								</t>
+								<t t-else='1'>
+									<span>Group by</span>
+								</t>
+							</a>
+							<div class="dropdown-menu" role="menu">
+								<t t-foreach="transport_group" t-as="sortby">
+									<a role="menuitem" rel="noindex,nofollow" t-att-href="keep('/my/transport_details', trans_group=sortby[1])" class="dropdown-item">
+										<span t-raw="sortby[0]"/>
+									</a>
+								</t>
+							</div>
+						</div>
+					</div>
+
+				</form>
+
+				<div class="table-responsive">
+					<t t-if="grouped_transport">
+						<t t-if="khush">
+							<table class="table table-hover text-center o_my_status_table">
+                                <thead>
+                                    <tr class="active">
+                                    <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                    	<th>Name</th>
+										<th>Transport Date</th>
+										<th>Transport Vehicle</th>
+										<th>Vehicle Driver</th>
+										<th>Delivery Order</th>
+										<th>Transporter Name</th>
+										<th>LR Number</th>
+										<th>Responsible User</th>
+										<th>State</th>
+                                    </tr>
+                                   	</tr>
+                                </thead>
+                                
+                            </table>
+                        </t>
+                        <t t-else="">
+							<table class="table table-hover o_portal_my_doc_table">
+								<t t-foreach="grouped_transport" t-as="trans">
+									<thead>
+										<tr class="active">
+											<tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+												<th t-if="groupby == 'status'">
+													<em class="font-weight-normal text-muted"><span/> For Status:</em>
+													<span t-field="trans[0].sudo().state"/>
+												</th>
+												<th t-elif="groupby == 'responsible'">
+													<em class="font-weight-normal text-muted"><span/> For Responsible User:</em>
+													<span t-field="trans[0].sudo().user_id.name"/>
+												</th>
+												<th t-elif="groupby == 'vehicle'">
+													<em class="font-weight-normal text-muted"><span/> For Vehicle:</em>
+													<span t-field="trans[0].sudo().tag_ids"/>
+												</th>
+												<th t-else="">Name</th>
+												<th>Transport Date</th>
+												<th>Transport Vehicle</th>
+												<th>Vehicle Driver</th>
+												<th>Delivery Order</th>
+												<th>Transporter Name</th>
+												<th>LR Number</th>
+												<th>Responsible User</th>
+												<th>State</th>
+											</tr>
+										</tr>
+									</thead>
+									<t t-foreach="trans" t-as="transport_id">
+										<tr>
+											<td>
+												<a t-attf-href="/transport/view/detail/#{transport_id.id}">
+													<t t-esc="transport_id.name" />
+												</a>
+											</td>
+											<td><span t-field="transport_id.date"/></td>
+											<td><span t-field="transport_id.tag_ids"/></td>
+											<td><span t-field="transport_id.driver_id"/></td>
+											<td><span t-field="transport_id.picking_id"/></td>
+											<td><span t-field="transport_id.transport_id"/></td>
+											<td><span t-field="transport_id.lr_number"/></td>
+											<td><span t-field="transport_id.user_id"/></td>
+											<td><span t-field="transport_id.state"/></td>
+										</tr>
+									</t>
+								</t>
+							</table>
+						</t>
+					</t>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<!-- Complete page of the transport -->
+	<template id="transport_portal_template" name="Transport Details Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+		<xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+			<t t-set="o_portal_fullwidth_alert">
+				<t t-call="portal.portal_back_in_edit_mode">
+					<t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=transport.entry&amp;id=%s&amp;view_type=form' % (transport_list.id)"/>
+				</t>
+			</t>
+
+			<div class="row mt16 o_portal_sale_sidebar">
+				<!-- Sidebar -->
+				<t t-call="portal.portal_record_sidebar">
+					<t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+					<t t-set="entries">
+						<ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+							<li class="list-group-item flex-grow-1">
+								<div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+									<div class="btn-group flex-grow-1 mr-1 mb-1">
+										<a class="btn btn-secondary btn-block o_download_btn" t-att-href="transport_list.get_portal_url(report_type='pdf', download=True)" title="Download"><i class="fa fa-download"/> Download</a>
+
+									</div>
+									<div class="btn-group flex-grow-1 mb-1">
+                                        <a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print" t-att-href="transport_list.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print" target="_blank"><i class="fa fa-print"/> Print</a>
+                                    </div>
+									
+								</div>
+							</li>
+							<li t-if="transport_list.user_id" class="list-group-item flex-grow-1">
+								<div class="small mb-1"><strong class="text-muted">Responsible</strong></div>
+								<div class="row flex-nowrap">
+									<div class="col flex-grow-0 pr-2">
+										<img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="transport_list.sudo().user_id.image_1024" t-att-src="image_data_uri(transport_list.user_id.image_1024)" alt="Contact"/>
+										<img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="not transport_list.sudo().user_id.image_1024" src="/web/static/src/img/placeholder.png" alt="Contact"/>
+									</div>
+									<div class="col pl-0" style="min-width: 150px">
+										<span t-field="transport_list.user_id" t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True}'/>
+										
+									</div>
+								</div>
+							</li>
+						</ul>
+					</t>
+				</t>
+				<div id="quote_content" class="col-12 col-lg justify-content-end">
+					<div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}">
+						<div t-call="bi_web_transport_portal.transport_portal_content"/>
+					</div>
+				</div>
+				 
+			</div>
+		</xpath>
+	</template>
+
+	<template id="transport_portal_content" name="Delivery Orders Portal Content">
+		<!-- Intro -->
+		<div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+			<h2 class="my-0">
+				<span t-field="transport_list.name" style="margin-left:20px"></span>
+				<t t-if="transport_list.state == 'draft'">
+                	<span class="badge badge-pill badge-primary" style="margin-left:570px;height:20px;width:80px;font-size:12px"><span class="d-none d-md-inline" style="color:black">Start</span></span>
+            	</t>
+            	<t t-if="transport_list.state == 'waiting'">
+                	<span class="badge badge-pill badge-warning" style="margin-left:570px;height:20px;width:80px;font-size:12px"><span class="d-none d-md-inline" style="color:black">Waiting</span></span>
+            	</t>
+            	<t t-if="transport_list.state == 'in-progress'">
+                	<span class="badge badge-pill badge-info" style="margin-left:570px;height:20px;width:80px;font-size:12px"><span class="d-none d-md-inline" style="color:black">In-Progress</span></span>
+            	</t>
+            	<t t-if="transport_list.state == 'done'">
+                	<span class="badge badge-pill badge-success" style="margin-left:570px;height:20px;width:80px;font-size:12px"><span class="d-none d-md-inline" style="color:black">Done</span></span>
+            	</t>
+            	<t t-if="transport_list.state == 'cancel'">
+                	<span class="badge badge-pill badge-danger" style="margin-left:570px;height:20px;width:80px;font-size:12px"><span class="d-none d-md-inline" style="color:black">Cancel</span></span>
+            	</t>
+			</h2>
+			
+		</div>
+
+		<div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+			<!-- Informations -->
+			<div id="informations" style="margin-left:20px">
+				<div class="row">
+					<div class="col-lg-6">
+						<strong class="d-block mb-1">Transporter Name:</strong>
+						<span t-field="transport_list.transport_id.name"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Transport Date:</strong>
+						<span t-field="transport_list.date"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Delivery Order:</strong>
+						<span t-field="transport_list.picking_id"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Contact Name:</strong>
+						<span t-field="transport_list.contact_person"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">LR Number:</strong>
+						<span t-field="transport_list.lr_number"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">No. Of Parcels:</strong>
+						<span t-field="transport_list.no_of_parcels"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Customer:</strong>
+						<span t-field="transport_list.customer_id"></span>
+					</div>
+
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Transport Vehicle:</strong>
+						<span t-field="transport_list.tag_ids"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Vehicle Driver:</strong>
+						<span t-field="transport_list.driver_id"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Sale Order:</strong>
+						<span t-field="transport_list.sale_order"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Responsible User:</strong>
+						<span t-field="transport_list.user_id"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Destination Location:</strong>
+						<span t-field="transport_list.location_dest_id"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Company:</strong>
+						<span t-field="transport_list.company_id"></span>
+					</div>
+					<div class="col-lg-6" style="margin-top:10px">
+						<strong class="d-block mb-1">Note:</strong>
+						<span t-field="transport_list.note"></span>
+					</div>
+
+				</div>				
+			</div>
+		</div>
+
+		<section id="details" style="page-break-inside: auto;" class="mt32">
+				<h3 id="details" style="margin-left:20px">Location Details</h3>
+				<table class="table table-sm" id="sales_order_table" style="margin-left:20px;width:95%;margin-top:10px">
+					<thead class="bg-100">
+						<tr>
+							<!-- TODO: remove in master -->
+							<t t-set="colspan" t-value="6"/>
+							<th class="text-left">Source Location</th>
+							<th class="text-left">Destination Location</th>
+							<th class="text-left">Distance(KM)</th>
+							<th class="text-left">Time in Hours</th>
+							<th class="text-left">Start Time</th>
+							<th class="text-left">End Time</th>
+							<th class="text-left">Tracking Number</th>
+							<th class="text-left">State</th>
+							<th class="text-left">Comment</th>
+						</tr>
+					</thead>
+					<tbody class="sale_tbody">
+						<t t-set="current_subtotal" t-value="0"/>
+						<t t-foreach="transport_list.transport_rote_ids" t-as="line">
+							<tr>
+								<t>
+									<td id="transport_name"><span t-field="line.source_loc"/></td>
+									<td class="text-left">
+										<span t-field="line.dest_loc"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.distance"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.time"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.start_time"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.end_time"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.tracking_number"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.state"/>
+									</td>
+									<td class="text-left">
+										<span t-field="line.note"/>
+									</td>
+								</t>
+							</tr>
+						</t>
+					</tbody>
+				</table>
+			</section>
+	</template>
+
+</odoo>

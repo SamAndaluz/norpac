@@ -1,0 +1,105 @@
+<openerp>
+<data>
+
+		<!-- Form for enter no of  parcel in stock picking -->
+       <record id="wizard_for_enter_no_of_parcel" model="ir.ui.view">
+            <field name="name">Enter No Of Parcels</field>
+            <field name="model">parcel.entry.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="no_of_parcel"/>
+                    </group>
+                    <footer>
+                        <button name="add_no_of_parcels" type="object" string="Add No Of Parcels"
+                            class="btn-primary" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+	<!--Action for genrate parcel wizard-->
+	<record id="action_parcel_entry_wizard" model="ir.actions.act_window">
+            <field name="name">Enter Parcel Entry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">parcel.entry.wizard</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+		<!--Adding new button for adding parcel and         "-->
+		<record id="fencing_inherited_stock1" model="ir.ui.view">
+            <field name="name">fencing_stock_picking_view</field>
+            <field name="model">stock.picking</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+			
+			<field  name="backorder_id" position="after">
+			<field  name="transport_id" string="Transport via" readonly="True"/>
+            <field name="vehicle_id" required="1" options="{'no_create': True, 'no_edit': True}" domain="[('transporter_id','=',transport_id)]"/>
+            <field name="driver_id"/>
+            <field name="route_id" domain="[('transporter_id','=',transport_id)]"/>
+			<field name="no_of_parcels" readonly="True"/>
+			<field name="lr_number"/>	   
+			<field name="parcel_entry_done" invisible= "True"/>         
+
+			</field >
+
+    <notebook  position="inside">
+	    <page string="Transport Routes Locations Entry" name="transport_details">
+			<field name="transport_routes_ids" >
+            <tree editable="bottom">
+                <field name = "source_loc"/>
+                <field name="dest_loc"/>
+                <field name= "distance" />
+                <field name="time"/>
+                <field name="state"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="tracking_number" invisible="1"/>                                          
+                <field name="note"/>                     
+            </tree>
+            <form>
+                <group>
+                    <group>
+                        <field name ="source_loc"/>
+                        <field name= "distance" />
+                        <field name="start_time"/>
+                        <field name="note"/>
+                        <field name="picking_id"/>
+                    </group>
+                        <group>
+                        <field name="dest_loc"/>
+                        <field name="time"/>
+                        <field name="end_time"/>
+                        <field name="state"/>                                        
+                    </group>
+                </group>                     
+            </form>
+            </field>
+		</page>
+		<page string="Transport Entry" name="transport_details">
+			<field name="transport_ids" readonly="1"/>
+		</page>
+	</notebook>
+
+
+	<button name="button_validate" position= "after">
+				
+    <button name="%(action_parcel_entry_wizard)d"
+            type="action" string="Enter No Of Parcel"
+            class="oe_highlight" 
+			attrs="{'invisible': [('parcel_entry_done', '=', True)]}"/>
+	</button>
+	</field >	
+</record>
+
+</data>
+</openerp>
+
+                   

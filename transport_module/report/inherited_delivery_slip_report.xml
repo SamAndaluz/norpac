@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<template id="report_delivery_document_inherit_add_transport_details" inherit_id="stock.report_delivery_document">
+    <xpath expr="//table[@class='table table-sm']" position="before">
+
+        <h3>Transport Details</h3>
+        <table class="table table-sm">
+            <tr>
+            <th>Transporter</th>
+            <th>Vehicle</th>
+            <th>Vehicle Driver</th>
+            <th>No of parcel</th>
+            <th>LR Number</th>
+            </tr>
+            <tr>
+                <td><span t-esc="o.transport_id.name"/></td>
+                <td><span t-esc="o.vehicle_id.name"/></td>
+                <td><span t-esc="o.driver_id.name"/></td>
+                <td><span t-esc="o.no_of_parcels"/></td>
+                <td><span t-esc="o.lr_number"/></td>
+            </tr>
+        </table>
+
+</xpath>
+</template>
+
+    
+    
+</odoo>

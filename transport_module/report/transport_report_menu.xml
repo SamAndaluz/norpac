@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+	<data>
+
+		<report id="transport_entry_report"
+				string="Transport Entry Details"
+				model="transport.entry"
+				report_type="qweb-pdf"
+				file="transport_module.transport_document"
+				name="transport_module.transport_document"/>
+		
+		
+	</data>
+</openerp>

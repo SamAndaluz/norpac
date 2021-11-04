@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transport_public_user,access.transport.public.user,model_transport,base.group_user,1,1,1,0
+access_transport_entry_user,access.transport.entry.public.user,model_transport_entry,base.group_user,1,1,1,0
+access_transport_public_inventory_user,access.transport.public.inventory.user,model_transport,stock.group_stock_user,1,1,1,1
+access_transport_entry_inventory_user,access.transport.entry.inventory.public.user,model_transport_entry,stock.group_stock_user,1,1,1,1
+access_transport_location_details_user,access.transport.location.details.user,model_transport_location_details,base.group_user,1,1,1,1
+access_route_locations_user,access.route.locations.user,model_route_locations,base.group_user,1,1,1,1
+access_transport.route_user,access.transport.route.user,model_transport_route,base.group_user,1,1,1,1
+access_parcel_entry_wizard,parcel.entry.wizard,model_parcel_entry_wizard,,1,1,1,1
+access_reschedule_entry,reschedule.entry,model_reschedule_entry,,1,1,1,1
+access_daily_taransport_report_excel,daily.taransport.report.excel,model_daily_taransport_report_excel,,1,1,1,1
+access_transport_entry_wizard,transport.entry.wizard,model_transport_entry_wizard,,1,1,1,1

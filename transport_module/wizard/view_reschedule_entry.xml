@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_reschedule_entry_form" model="ir.ui.view">
+            <field name="name">reschedule.entry.form</field>
+            <field name="model">reschedule.entry</field>
+            <field name="arch" type="xml">
+                <form>
+	                <group>
+                        <field name="reschedule_date"/>
+                    </group>
+                    <footer>
+                        <button name="reschedule_transport_entry" string="Reschedule" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_reschedule_entry" model="ir.actions.act_window">
+            <field name="name">Reschedule Transport Entry</field>
+            <field name="res_model">reschedule.entry</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_reschedule_entry_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

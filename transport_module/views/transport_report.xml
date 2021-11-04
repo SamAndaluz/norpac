@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="transport_reports_details_1">
+        <t t-call="report.html_container">
+            <t t-call="report.external_layout">
+
+
+    <t t-set="data_report_margin_top" t-value="12"/>
+        <t t-set="data_report_header_spacing" t-value="9"/>
+        <t t-set="data_report_dpi" t-value="110"/>
+        <t t-foreach="docs" t-as="o">
+    
+                <div class="page">
+                    <div class="row">
+                        <div>
+                        <center style="padding-left:50px;" ><b>Daily Transport Report</b></center>
+                        <center><b><span>date : </span><span t-esc="o.start_date"/></b></center>
+                        </div>
+                    </div><br/>
+                    <table style="width:100%; padding:5px 10px 5px 5px;" cellpadding="10"  >
+                        <thead style="padding-top:5px;">
+                            <tr style="border-bottom: 2px solid black;">
+                                <th><strong>Transport</strong></th>
+                                <th><strong>Address</strong></th>
+                                <th><strong>Customer</strong></th>
+                                <th><strong>Address</strong></th>
+                                <th><strong>Delivery No.</strong></th>
+                                <th><strong>No. Of Parcel</strong></th>
+                                <th><strong>LR No.</strong></th>
+                            </tr>
+                        </thead>                 
+                    </table><br/>
+		           
+		           <div align='right' style="padding-top:670px;">
+		           For, INTERGLOBLE MANUFACTURING CO
+		           </div>
+		           
+                </div>
+            </t>
+         </t>
+    </t>
+
+    </template>
+
+
+</odoo>
+
